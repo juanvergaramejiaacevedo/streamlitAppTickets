@@ -143,7 +143,7 @@ def validarPagina(pagina,usuario):
     
     # Validamos si el rol del usuario tiene acceso a la página
     if len(dfPagina)>0:
-        if rol in dfPagina['roles'].values[0] or rol == "Administrador" or st.secrets["tipoPermiso"]=="rol":
+        if rol in dfPagina['roles'].values[0] or rol == "Administrador" or st.secrets.permisos.tipoPermiso=="rol":
             return True # El usuario tiene permiso
         else:
             return False # El usuario no tiene permiso
@@ -177,7 +177,7 @@ def generarMenuRoles(usuario):
         # Mostramos los enlaces de páginas        
         st.subheader("Opciones")
         # Verificamos si se deben ocultar o deshabilitar las opciones del menú
-        if st.secrets["ocultarOpciones"]=="True": # Verificamos el valor del secreto "ocultarOpciones"
+        if st.secrets.permisos.ocultarOpciones=="True": # Verificamos el valor del secreto "ocultarOpciones"
             if rol!='Administrador': # Si el rol no es admin
                 # Filtramos la tabla de páginas por el rol actual
                 dfPaginas = dfPaginas[dfPaginas['roles'].str.contains(rol)]                   
@@ -217,7 +217,7 @@ def generarLogin(archivo):
     if 'correo_electronico' in st.session_state: # Verificamos si la variable usuario esta en el session state
         
         # Si ya hay usuario cargamos el menu
-        if st.secrets["tipoPermiso"]=="rolpagina":
+        if st.secrets.permisos.tipoPermiso=="rolpagina":
             generarMenuRoles(st.session_state['correo_electronico']) # Generamos el menú para la página
         else:
             generarMenu(st.session_state['correo_electronico']) # Generamos el menú del usuario       

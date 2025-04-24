@@ -6,12 +6,11 @@ import psycopg2
 from sqlalchemy import create_engine, text
 from configparser import ConfigParser
 
-DB_USERNAME=st.secrets["DB_USERNAME"]
-DB_PASSWORD=st.secrets["DB_PASSWORD"]
-DB_URL=st.secrets["DB_URL"]
-DB_PORT=st.secrets["DB_PORT"]
-DB_NAME=st.secrets["DB_NAME"]
-
+DB_USERNAME=st.secrets.database.DB_USERNAME
+DB_PASSWORD=st.secrets.database.DB_PASSWORD
+DB_URL=st.secrets.database.DB_URL
+DB_PORT=st.secrets.database.DB_PORT
+DB_NAME=st.secrets.database.DB_NAME
 
 # Definición de la función para obtener la cadena de conexión a la base de datos
 def get_engine():

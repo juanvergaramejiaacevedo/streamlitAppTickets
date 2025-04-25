@@ -8,7 +8,7 @@ from bd import query_to_df
 #load_dotenv()
 
 # Creamos una instancia de CookieController
-controller = CookieController()
+# controller = CookieController()
 
 # Validación simple de usuario y clave con un archivo csv
 
@@ -106,7 +106,7 @@ def generarMenu(usuario):
         if btnSalir: # Si se presiona el botón
             st.session_state.clear() # Limpiamos las variables de sesión
             #st.session_state.clear()
-            controller.remove('correo_electronico')
+            # controller.remove('correo_electronico')
             # Luego de borrar el Session State reiniciamos la app para mostrar la opción de usuario y clave
             st.rerun() # Reiniciamos la aplicación
 
@@ -199,7 +199,7 @@ def generarMenuRoles(usuario):
         btnSalir=st.button("Salir")
         if btnSalir:
             st.session_state.clear()
-            controller.remove('correo_electronico')
+            # controller.remove('correo_electronico')
             st.rerun()
 
 # Generación de la ventana de login y carga de menú
@@ -208,11 +208,11 @@ def generarLogin(archivo):
     """    
     
     # Obtenemos el usuario de la cookie
-    usuario = controller.get('correo_electronico')    
+    # usuario = controller.get('correo_electronico')    
     # Validamos si el usuario ya fue ingresado
-    if usuario:
+    # if usuario:
         # Si ya hay usuario en el cookie, lo asignamos al session state
-        st.session_state['correo_electronico'] = usuario
+        # st.session_state['correo_electronico'] = usuario
     # Validamos si el usuario ya fue ingresado    
     if 'correo_electronico' in st.session_state: # Verificamos si la variable usuario esta en el session state
         
@@ -234,7 +234,7 @@ def generarLogin(archivo):
                 if validarUsuario(parUsuario,parPassword): # Verificamos si el usuario y la clave existen
                     st.session_state['correo_electronico'] =parUsuario # Asignamos la variable de usuario
                     # Set a cookie
-                    controller.set('correo_electronico', parUsuario)
+                    # controller.set('correo_electronico', parUsuario)
                     # Si el usuario es correcto reiniciamos la app para que se cargue el menú
                     st.rerun() # Reiniciamos la aplicación
                 else:

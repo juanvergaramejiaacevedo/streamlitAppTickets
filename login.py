@@ -180,7 +180,8 @@ def generarMenuRoles(usuario):
         if st.secrets.permisos.ocultarOpciones=="True": # Verificamos el valor del secreto "ocultarOpciones"
             if rol!='Administrador': # Si el rol no es admin
                 # Filtramos la tabla de páginas por el rol actual
-                dfPaginas = dfPaginas[dfPaginas['roles'].str.contains(rol)]                   
+                dfPaginas = dfPaginas[dfPaginas['roles'].apply(lambda roles_str: rol in roles_str.split('|'))]
+
             # Ocultamos las páginas que no tiene permiso
             for index, row in dfPaginas.iterrows():
                 icono=row['icono']            

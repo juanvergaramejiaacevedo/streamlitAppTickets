@@ -1,14 +1,115 @@
 # Importamos las librerías necesarias
 import streamlit as st  # Librería para crear aplicaciones web interactivas. Instalación: pip install streamlit
 import pandas as pd  # Librería para manipulación y análisis de datos. Instalación: pip install pandas
+import random
 from streamlit_cookies_controller import CookieController # Librería para manejar cookies en Streamlit. Instalación: pip install streamlit-cookies-controller
 from dotenv import load_dotenv
 from bd import query_to_df
+from mailjet_rest import Client
 
 #load_dotenv()
 
 # Creamos una instancia de CookieController
 # controller = CookieController()
+
+# Función para enviar el correo con el código de verificación vía Mailjet 
+def enviar_codigo_mailjet(destinatario, nombre_destinatario, codigo_verificacion): 
+    """ 
+    Envía un correo utilizando Mailjet, mostrando el código de verificación en un formato HTML. 
+    """ 
+    # Configuración de Mailjet desde los secretos 
+    api_key = st.secrets.mailjet.apikeyPublic 
+    api_secret = st.secrets.mailjet.apikeyPrivate 
+    mailjet = Client(auth=(api_key, api_secret), version='v3.1') 
+     
+    mensaje = "Estimad@ Usuari@, en el siguiente correo encontrará el código de acceso para la App." 
+    # Si el código es una cadena de 6 dígitos, lo convertimos en lista para mostrar cada dígito en una caja 
+    listado_Codigo = [d for d in codigo_verificacion] 
+     
+    mensaje_HTML = f""" 
+    <html> 
+    <head> 
+        <style> 
+            body {{ 
+                font-family: Arial, sans-serif; 
+                background-color: #f2f2f2; 
+                padding: 20px; 
+                margin: 0; 
+            }} 
+            .container {{ 
+                max-width: 500px; 
+                margin: auto; 
+                background: #fff; 
+                padding: 30px; 
+                border-radius: 8px; 
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+                text-align: center; 
+            }} 
+            h1 {{ 
+                margin-bottom: 20px; 
+                font-size: 24px; 
+                color: #333; 
+            }} 
+            .verification-boxes {{ 
+                display: inline-flex; 
+                gap: 10px; 
+            }} 
+            .box {{ 
+                width: 40px; 
+                height: 40px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                font-size: 24px; 
+                font-weight: bold; 
+                color: #333; 
+                border: 2px solid #ddd; 
+                border-radius: 4px; 
+                background-color: #f9f9f9; 
+            }} 
+        </style> 
+    </head> 
+    <body> 
+        <div class="container"> 
+          <h1>Código de Verificación</h1> 
+          <div class="verification-boxes"> 
+              <div class="box">{listado_Codigo[0]}</div> 
+              <div class="box">{listado_Codigo[1]}</div> 
+              <div class="box">{listado_Codigo[2]}</div> 
+              <div class="box">{listado_Codigo[3]}</div> 
+              <div class="box">{listado_Codigo[4]}</div> 
+              <div class="box">{listado_Codigo[5]}</div> 
+          </div> 
+        </div> 
+    </body> 
+    </html> 
+    """ 
+     
+    data = { 
+      'Messages': [ 
+                    { 
+                        "From": { 
+                            "Email": "juan.vergara@mejiaacevedo.com.co", 
+                            "Name": "Juan Daniel Vergara" 
+                        }, 
+                        "To": [ 
+                                { 
+                                    "Email": destinatario, 
+                                    "Name": nombre_destinatario 
+                                } 
+                        ], 
+                        "Subject": "Código de Autenticación | Tableros Power BI App", 
+                        "TextPart": mensaje, 
+                        "HTMLPart": mensaje_HTML 
+                    } 
+            ] 
+    } 
+ 
+    result = mailjet.send.create(data=data) 
+    if result.status_code in [200, 201]: 
+        st.info("Correo enviado exitosamente.") 
+    else: 
+        st.error("Fallo al enviar el correo.")
 
 # Validación simple de usuario y clave con un archivo csv
 
@@ -203,41 +304,77 @@ def generarMenuRoles(usuario):
             # controller.remove('correo_electronico')
             st.rerun()
 
-# Generación de la ventana de login y carga de menú
+# Función de login con doble validación
 def generarLogin(archivo):
-    """Genera la ventana de login o muestra el menú si el login es valido
-    """    
-    
-    # Obtenemos el usuario de la cookie
-    # usuario = controller.get('correo_electronico')    
-    # Validamos si el usuario ya fue ingresado
-    # if usuario:
-        # Si ya hay usuario en el cookie, lo asignamos al session state
-        # st.session_state['correo_electronico'] = usuario
-    # Validamos si el usuario ya fue ingresado    
-    if 'correo_electronico' in st.session_state: # Verificamos si la variable usuario esta en el session state
-        
-        # Si ya hay usuario cargamos el menu
-        if st.secrets.permisos.tipoPermiso=="rolpagina":
-            generarMenuRoles(st.session_state['correo_electronico']) # Generamos el menú para la página
+    """
+    Flujo de login con dos pasos:
+    1. Validación de usuario y contraseña.
+    2. Verificación del código enviado vía correo.
+    """
+    # Si ya se ha completado la verificación, se carga el menú y la página
+    if 'correo_electronico' in st.session_state:
+
+        if st.secrets.permisos.tipoPermiso == "rolpagina":
+
+            generarMenuRoles(st.session_state['correo_electronico'])
+
         else:
-            generarMenu(st.session_state['correo_electronico']) # Generamos el menú del usuario       
-        if validarPagina(archivo,st.session_state['correo_electronico'])==False: # Si el usuario existe, verificamos la página        
-            st.error(f"No tiene permisos para acceder a esta página {archivo}",icon=":material/gpp_maybe:")
-            st.stop() # Detenemos la ejecución de la página
-    else: # Si no hay usuario
-        # Cargamos el formulario de login       
-        with st.form('frmLogin'): # Creamos un formulario de login
-            parUsuario = st.text_input('Usuario (Correo electrónico)') # Creamos un campo de texto para usuario
-            parPassword = st.text_input('Password (Nro. Documento)',type='password') # Creamos un campo para la clave de tipo password
-            btnLogin=st.form_submit_button('Ingresar',type='primary') # Botón Ingresar
-            if btnLogin: # Verificamos si se presiono el boton ingresar
-                if validarUsuario(parUsuario,parPassword): # Verificamos si el usuario y la clave existen
-                    st.session_state['correo_electronico'] =parUsuario # Asignamos la variable de usuario
-                    # Set a cookie
-                    # controller.set('correo_electronico', parUsuario)
-                    # Si el usuario es correcto reiniciamos la app para que se cargue el menú
-                    st.rerun() # Reiniciamos la aplicación
+
+            generarMenu(st.session_state['correo_electronico'])
+
+        if not validarPagina(archivo, st.session_state['correo_electronico']):
+
+            st.error(f"No tiene permisos para acceder a esta página {archivo}")
+            st.stop()
+
+    else:
+
+    # Si ya se enviaron las credenciales y el código al correo, mostramos el campo para verificarlos.
+        if 'pending_user' in st.session_state:
+
+            st.info("Hemos enviado un correo con el código de verificación. Ingresa el código a continuación:")
+            codigo_ingresado = st.text_input("Código de Verificación:")
+
+            if st.button("Verificar código"):
+
+                if codigo_ingresado == st.session_state.get('verification_code'):
+
+                    # El código es correcto: finalizamos el login
+                    st.session_state['correo_electronico'] = st.session_state.pop('pending_user')
+                    st.success("¡Código verificado exitosamente! Ahora puedes acceder a las páginas.")
+                    st.rerun()
+
                 else:
-                    # Si el usuario es invalido, mostramos el mensaje de error
-                    st.error("Usuario o clave inválidos",icon=":material/gpp_maybe:") # Mostramos un mensaje de error                    
+
+                    st.error("Código incorrecto. Por favor, intenta nuevamente.")
+
+            return # Finalizamos aquí para que no se muestre el formulario de usuario/clave.
+    
+        # Formulario inicial de login: se solicitan usuario y contraseña.
+        with st.form('frmLogin'):
+
+            parUsuario = st.text_input('Usuario (Correo electrónico)')
+            parPassword = st.text_input('Password (Nro. Documento)', type='password')
+            btnLogin = st.form_submit_button('Ingresar', type='primary')
+    
+            if btnLogin:
+
+                if validarUsuario(parUsuario, parPassword):
+
+                    # Credenciales correctas: generamos el código de verificación
+                    codigo_verificacion = ''.join(random.choices("0123456789", k=6))
+                    
+                    st.session_state['pending_user'] = parUsuario
+                    st.session_state['verification_code'] = codigo_verificacion
+                    # Envío del correo mediante Mailjet:
+                    # Aquí usamos el correo ingresado como destinatario y, en este ejemplo, el nombre será el mismo;
+                    # puedes adaptar esto si cuentas con el nombre real del usuario.
+                    enviar_codigo_mailjet(parUsuario, parUsuario, codigo_verificacion)
+
+                    st.info("Se ha enviado un código de verificación a tu correo. Ingresa el código en el campo superior.")
+
+                    st.rerun()
+
+            else:
+
+                st.error("Usuario o clave inválidos", icon=":material/gpp_maybe:")                  

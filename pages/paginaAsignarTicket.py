@@ -37,6 +37,8 @@ if 'correo_electronico' in st.session_state:
     
     usuarios_df = query_to_df(query_Usuarios)
 
+    st.dataframe(usuarios_df)
+
     obtener_Usuarios_Soporte = usuarios_df.loc[
         usuarios_df["id_rol"].isin([3, 4, "3", "4"]), ["nombre_completo"]
     ]

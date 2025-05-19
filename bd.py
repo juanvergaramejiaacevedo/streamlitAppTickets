@@ -100,6 +100,16 @@ def create_ticket(id_usuario, id_asunto_ticket, descripcion_ticket):
 #    execute_query("UPDATE info_ticket SET id_usuario = %s, id_proyecto = %s, id_asunto_ticket = %s, descripcion_ticket = %s, estado = %s WHERE id_ticket = %s", 
 #                  (id_usuario, id_proyecto, id_asunto_ticket, descripcion_ticket, estado, id_ticket))
 
+def update_asignar_ticket(id_ticket, id_usuario_asignado):
+    query = """UPDATE info_ticket 
+    SET id_usuario_asignado = :id_usuario_asignado 
+    WHERE id_ticket = :id_ticket
+    """
+    execute_query(query, {
+        "id_usuario_asignado": id_usuario_asignado, 
+        "id_ticket": id_ticket
+    })
+
 def update_estado_ticket(id_ticket, nuevo_estado, fecha_soporte, observaciones_respuesta, id_usuario_soporte):
     query = """
     UPDATE info_ticket

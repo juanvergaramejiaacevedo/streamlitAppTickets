@@ -21,7 +21,7 @@ if 'correo_electronico' in st.session_state:
     """
     
     tickets_df = query_to_df(query_Tickets)
-    numero_Ticket = tickets_df["identificador"].tolist()
+    numero_Ticket = tickets_df["id_ticket"].tolist()
     
     query_Usuarios = """
         SELECT * 

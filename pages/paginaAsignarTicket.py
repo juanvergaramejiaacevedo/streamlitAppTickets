@@ -105,7 +105,7 @@ if 'correo_electronico' in st.session_state:
                 
                 update_asignar_ticket(
                     id_ticket=int(tickets_df.iloc[indice_ticket]["identificador"]),
-                    id_usuario_soporte=int(id_Usuario_Soporte_Seleccionado)
+                    id_usuario_asignado=int(id_Usuario_Soporte_Seleccionado)
                 )
 
                 st.success(f"El Ticket #ID{int(tickets_df.iloc[indice_ticket]["identificador"])} ha sido asignado a: {usuario_Soporte_Seleccionado} correctamente.")

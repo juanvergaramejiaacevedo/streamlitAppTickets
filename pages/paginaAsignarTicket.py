@@ -26,6 +26,7 @@ if 'correo_electronico' in st.session_state:
     query_Usuarios = """
         SELECT infusr.id_usuario,
         infusr.nombre_completo,
+        infusr.correo_electronico,
         infrol.id_rol,
         infrol.nombre_rol
         FROM info_usuario infusr 

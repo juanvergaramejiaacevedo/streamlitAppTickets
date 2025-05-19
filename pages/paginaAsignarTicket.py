@@ -50,10 +50,10 @@ if 'correo_electronico' in st.session_state:
     #nombres_usuarios = obtener_Usuarios_Soporte["nombre_completo"].tolist()
     
     obtener_Usuarios_Soporte = usuarios_df.loc[
-        usuarios_df["id_rol"].astype(int).isin([3, 4]), ["nombre_completo"]
+        usuarios_df["id_rol"].astype(int).isin([3, 4]), "nombre_completo"
     ]
 
-    nombres_usuarios = obtener_Usuarios_Soporte["nombre_completo"].tolist()
+    nombres_usuarios = obtener_Usuarios_Soporte.tolist()
 
     usuario_soporte = st.session_state["correo_electronico"]
 

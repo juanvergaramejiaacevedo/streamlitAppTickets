@@ -21,7 +21,12 @@ if 'correo_electronico' in st.session_state:
     """
     
     tickets_df = query_to_df(query_Tickets)
-    numero_Ticket = tickets_df["identificador"].tolist()
+
+    #id_usuario = st.session_state.get("id_usuario", None)
+    #if id_usuario is not None:
+        #tickets_df = tickets_df[tickets_df["id_usuario_asignado"] == id_usuario]
+
+    #numero_Ticket = tickets_df["identificador"].tolist()
     
     query_Usuarios = """
         SELECT * 
@@ -43,6 +48,10 @@ if 'correo_electronico' in st.session_state:
     id_usuario_soporte_actual = usuarios_df.loc[
         usuarios_df["correo_electronico"] == usuario_soporte, "id_usuario"
     ].values[0]
+
+    tickets_df = tickets_df[tickets_df["id_usuario_asignado"] == id_usuario_soporte_actual]
+
+    numero_Ticket = tickets_df["identificador"].tolist()
     
     st.markdown(f"""> ### Usuario Soporte: {usuario_soporte} | ID Usuario: {id_usuario_soporte_actual}""")
     

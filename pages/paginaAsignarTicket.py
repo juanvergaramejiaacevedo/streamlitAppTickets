@@ -24,7 +24,10 @@ if 'correo_electronico' in st.session_state:
     numero_Ticket = tickets_df["id_ticket"].tolist()
     
     query_Usuarios = """
-        SELECT * 
+        SELECT infusr.id_usuario,
+        infusr.nombre_completo,
+        infrol.id_rol,
+        infrol.nombre_rol
         FROM info_usuario infusr 
         INNER JOIN tipos_documento tdc ON 
             tdc.id_tipo_documento = infusr.id_tipo_documento
@@ -36,6 +39,8 @@ if 'correo_electronico' in st.session_state:
     """
     
     usuarios_df = query_to_df(query_Usuarios)
+
+    st.dataframe(usuarios_df, use_container_width=True)
 
     #st.dataframe(usuarios_df)
 

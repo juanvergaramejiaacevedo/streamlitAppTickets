@@ -40,20 +40,6 @@ if 'correo_electronico' in st.session_state:
     """
     
     usuarios_df = query_to_df(query_Usuarios)
-
-    st.dataframe(usuarios_df, use_container_width=True)
-
-    #st.dataframe(usuarios_df)
-
-    #obtener_Usuarios_Soporte = usuarios_df.loc[
-    #    usuarios_df["id_rol"].isin([3, 4, "3", "4"]), ["nombre_completo"]
-    #]
-
-    #obtener_Usuarios_Soporte = usuarios_df.loc[
-    #    usuarios_df["id_rol"].astype(int).isin([3, 4]), "nombre_completo"
-    #]
-
-    #nombres_usuarios = obtener_Usuarios_Soporte["nombre_completo"].tolist()
     
     obtener_Usuarios_Soporte = usuarios_df.loc[
         usuarios_df["id_rol"].astype(int).isin([3, 4]), "nombre_completo"
@@ -94,8 +80,6 @@ if 'correo_electronico' in st.session_state:
         id_Usuario_Soporte_Seleccionado = usuarios_df.loc[
             usuarios_df["nombre_completo"] == usuario_Soporte_Seleccionado, "id_usuario"
         ].values[0]
-
-        #observiones_Respuesta_Ticket = st.text_input(label="s", label_visibility="hidden", placeholder="Digite las observaciones...", max_chars=1000)
         
         if usuario_Soporte_Seleccionado:
 

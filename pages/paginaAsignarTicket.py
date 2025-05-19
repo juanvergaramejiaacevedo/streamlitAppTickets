@@ -16,12 +16,12 @@ if 'correo_electronico' in st.session_state:
     
     query_Tickets = """
         SELECT * 
-        FROM info_ticket
-        ORDER BY id_ticket DESC;
+        FROM viewinfoasignartickets
+        ORDER BY identificador DESC;
     """
     
     tickets_df = query_to_df(query_Tickets)
-    numero_Ticket = tickets_df["id_ticket"].tolist()
+    numero_Ticket = tickets_df["identificador"].tolist()
     
     query_Usuarios = """
         SELECT infusr.id_usuario,

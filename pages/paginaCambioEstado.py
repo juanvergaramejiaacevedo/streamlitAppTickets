@@ -16,7 +16,7 @@ if 'correo_electronico' in st.session_state:
     
     query_Tickets = """
         SELECT * 
-        FROM viewinfoasignartickets
+        FROM viewinfocambioestadotickets
         ORDER BY identificador DESC;
     """
     

@@ -98,7 +98,7 @@ def enviar_codigo_mailjet(destinatario, nombre_destinatario, codigo_verificacion
                                     "Name": nombre_destinatario 
                                 } 
                         ], 
-                        "Subject": "Código de Autenticación | Tableros Power BI App", 
+                        "Subject": "Código de Autenticación | App Tickets", 
                         "TextPart": mensaje, 
                         "HTMLPart": mensaje_HTML 
                     } 

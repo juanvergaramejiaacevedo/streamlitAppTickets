@@ -17,9 +17,21 @@ if 'correo_electronico' in st.session_state:
     #> ## Dashboard - Tickets
     #""")
     tickets_df = query_to_df(f"""
-    SELECT * 
-    FROM public.viewinfotickets inftks
-    WHERE inftks.correo_electronico = '{usuario_Tickets}'
+    SELECT vat.nombre_completo,
+    vat.correo_electronico,
+    vat.numero_documento,
+    vat.nombre_proyecto,
+    vat.descripcion_asunto,
+    vat.descripcion_ticket,
+    vat.fecha_creacion,
+    vat.fecha_atencion,
+    vat.observaciones_respuesta,
+    vat.estado,
+    vat.atendido_por,
+    vat.correo_atendido_por,
+    vat.rol_atendido_por
+    FROM public.viewanalyticstickets vat
+    WHERE vat.correo_electronico = '{usuario_Tickets}'
     """)
     
     if tickets_df.empty:

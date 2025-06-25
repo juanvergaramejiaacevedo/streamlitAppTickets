@@ -140,16 +140,14 @@ def get_tickets_analytics():
 def get_tickets_analytics_sopint():
     return query_to_df("""
     SELECT * 
-    FROM viewinfotickets inftks
-    WHERE inftks.rol_atendido_por = 'SoporteInterno'
+    FROM viewanalyticssopint
     """)
     
 
 def get_tickets_analytics_sopext():
     return query_to_df("""
     SELECT * 
-    FROM viewinfotickets inftks
-    WHERE inftks.rol_atendido_por = 'SoporteExterno'
+    FROM viewanalyticssopext
     """)
     
     

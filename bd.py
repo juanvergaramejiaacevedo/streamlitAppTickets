@@ -133,7 +133,7 @@ def delete_ticket(id_ticket):
 def get_tickets_analytics():
     return query_to_df("""
     SELECT * 
-    FROM viewinfotickets inftks
+    FROM viewanalyticstickets inftks
     """)
     
     

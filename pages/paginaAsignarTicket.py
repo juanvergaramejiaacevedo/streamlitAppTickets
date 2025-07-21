@@ -42,7 +42,7 @@ if 'correo_electronico' in st.session_state:
     usuarios_df = query_to_df(query_Usuarios)
     
     obtener_Usuarios_Soporte = usuarios_df.loc[
-        usuarios_df["id_rol"].astype(int).isin([3, 4]), "nombre_completo"
+        usuarios_df["id_rol"].astype(int).isin([2, 3, 4]), "nombre_completo"
     ]
 
     nombres_usuarios = obtener_Usuarios_Soporte.tolist()

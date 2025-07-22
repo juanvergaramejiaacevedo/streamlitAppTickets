@@ -110,10 +110,6 @@ if 'correo_electronico' in st.session_state:
                 st.markdown(f"**Fecha:** {row['fecha_observacion']}")
                 st.markdown(f"**Contenido:** {row['contenido']}")
                 st.markdown("---")
-            
-                
-            contenido_observacion_lleno = st.text_area("Ingrese el contenido de la observación:")
-            submit_button_lleno = st.button("Agregar Observación")
 
             with st.form(key="formulario_observacion", clear_on_submit=True):
                 contenido_observacion = st.text_area("Ingrese el contenido de la observación:")

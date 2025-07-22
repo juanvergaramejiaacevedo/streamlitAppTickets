@@ -13,8 +13,6 @@ if 'correo_electronico' in st.session_state:
     # Obtener el correo electrónico del usuario actual desde la sesión
     usuario_Actual = st.session_state['correo_electronico']
 
-    #st.write(f"Correo del Usuario: {usuario_Actual}")
-
     query_Usuarios = """
         SELECT * 
         FROM info_usuario infusr 
@@ -34,27 +32,52 @@ if 'correo_electronico' in st.session_state:
         usuarios_df["correo_electronico"] == usuario_Actual, "id_usuario"
     ].values[0]
 
-    # Mostrar el correo electrónico como un campo de solo lectura
-    st.text_input("Correo electrónico:", value=usuario_Actual, disabled=True)
+    with st.form("formulario_ticket"):
 
-    # Seleccionar el asunto del ticket
-    asuntos_tickets_df = query_to_df("SELECT * FROM asunto_ticket WHERE activo = 'S';")
-    descripciones_asuntos = asuntos_tickets_df["descripcion_asunto"].tolist()
-    asunto_seleccionado = st.selectbox(
-        "Selecciona el asunto del ticket:",
-        descripciones_asuntos
-    )
-    id_asunto_ticket = asuntos_tickets_df.loc[
-        asuntos_tickets_df["descripcion_asunto"] == asunto_seleccionado, "id_asunto_ticket"
-    ].values[0]
+        st.text_input("Correo electrónico:", value=usuario_Actual, disabled=True)
 
-    # Campo para la descripción del ticket
-    descripcion_ticket = st.text_area("Describe el problema o solicitud:", placeholder="Escribe aquí los detalles del ticket...")
+        # Seleccionar el asunto del ticket
+        asuntos_tickets_df = query_to_df("SELECT * FROM asunto_ticket WHERE activo = 'S' ORDER BY asunto_ticket DESC;")
+        
+        descripciones_asuntos = asuntos_tickets_df["descripcion_asunto"].tolist()
+        
+        asunto_seleccionado = st.selectbox(
+            "Selecciona el asunto del ticket:",
+            descripciones_asuntos
+        )
 
-    # Botón para registrar el ticket
-    if st.button("Crear Ticket"):
+        id_asunto_ticket = asuntos_tickets_df.loc[
+            asuntos_tickets_df["descripcion_asunto"] == asunto_seleccionado, "id_asunto_ticket"
+        ].values[0]
+
+        # Seleccionar la prioridad del ticket
+        prioridades_ticket_df = query_to_df("SELECT * FROM prioridades_ticket WHERE activo = 'S';")
+        
+        descripciones_prioridades = prioridades_ticket_df["tipo_prioridad"].tolist()
+        
+        prioridad_seleccionada = st.selectbox(
+            "Selecciona la prioridad del ticket:",
+            descripciones_prioridades
+        )
+        
+        id_prioridad_ticket = prioridades_ticket_df.loc[
+            prioridades_ticket_df["tipo_prioridad"] == prioridad_seleccionada, "id_prioridad"
+        ].values[0]
+
+        # Campo para la descripción del ticket
+        descripcion_ticket = st.text_area("Describe el problema o solicitud:", placeholder="Escribe aquí los detalles del ticket...")
+
+        # Botón para registrar el ticket
+        boton_Enviar = st.form_submit_button("Crear Ticket")
+    
+    if boton_Enviar:
+
         if descripcion_ticket.strip():
-            create_ticket(int(id_usuario), int(id_asunto_ticket), descripcion_ticket)
-            st.success("Ticket creado exitosamente.")
+
+            st.success("✅ Ticket creado exitosamente.")
+
+            create_ticket(int(id_usuario), int(id_asunto_ticket), descripcion_ticket, int(id_prioridad_ticket))
+
         else:
-            st.error("Por favor, proporciona una descripción para el ticket.")
+        
+            st.error("❌ Por favor, proporciona una descripción para el ticket.")

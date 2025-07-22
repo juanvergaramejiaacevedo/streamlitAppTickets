@@ -92,9 +92,9 @@ def delete_asunto_ticket(id_asunto_ticket):
 def get_tickets():
     return query_to_df("SELECT * FROM info_ticket")
 
-def create_ticket(id_usuario, id_asunto_ticket, descripcion_ticket):
-    query = "INSERT INTO info_ticket (id_usuario, id_asunto_ticket, descripcion_ticket) VALUES (:id_usuario, :id_asunto_ticket, :descripcion_ticket)"
-    execute_query(query,{"id_usuario": id_usuario, "id_asunto_ticket": id_asunto_ticket, "descripcion_ticket": descripcion_ticket})
+def create_ticket(id_usuario, id_asunto_ticket, descripcion_ticket, id_prioridad):
+    query = "INSERT INTO info_ticket (id_usuario, id_asunto_ticket, descripcion_ticket, prioridad_id) VALUES (:id_usuario, :id_asunto_ticket, :descripcion_ticket, :id_prioridad)"
+    execute_query(query,{"id_usuario": id_usuario, "id_asunto_ticket": id_asunto_ticket, "descripcion_ticket": descripcion_ticket, "id_prioridad": id_prioridad})
 
 #def update_ticket(id_ticket, id_usuario, id_proyecto, id_asunto_ticket, descripcion_ticket, estado):
 #    execute_query("UPDATE info_ticket SET id_usuario = %s, id_proyecto = %s, id_asunto_ticket = %s, descripcion_ticket = %s, estado = %s WHERE id_ticket = %s", 
@@ -127,6 +127,19 @@ def update_estado_ticket(id_ticket, nuevo_estado, fecha_soporte, observaciones_r
 def delete_ticket(id_ticket):
     query = "UPDATE info_ticket SET activo = 'N' WHERE id_ticket = :id_ticket"
     execute_query(query, {"id_ticket": id_ticket})
+
+
+
+def get_observations_ticket():
+    return query_to_df("""
+    SELECT * 
+    FROM observaciones_ticket
+    """)
+
+
+def create_observation_ticket(id_ticket, id_usuario, contenido):
+    query = "INSERT INTO observaciones_ticket (id_ticket, id_usuario, contenido) VALUES (:id_ticket, :id_usuario, :contenido)"
+    execute_query(query, {"id_ticket": id_ticket, "id_usuario": id_usuario, "contenido": contenido})
     
     
     
@@ -191,3 +204,17 @@ def detalle_cambio_estado_ticket(dataFrame: pd.DataFrame, indice_ticket: int):
     st.write(f"**:blue[Nombre del Proyecto]:** {ticket_detalle['nombre_proyecto']}")
     st.write(f"**:blue[Asunto del Ticket]:** {ticket_detalle['descripcion_asunto']}")
     st.write(f"**:blue[Observaciones]:** {ticket_detalle['descripcion_ticket']}")
+
+@st.dialog("Registro de Observación del Ticket", width="large")
+def detalle_crear_observacion_ticket(var_Identificador_Ticket, id_usuario, contenido_observacion):
+    """Función que recibe como parámetros el DataFrame y el Índice del Ticket para luego mostrarlos en un modal.
+
+    Args:
+        dataFrame (pd.DataFrame): Parámetro con el DataFrame que contiene el listado de Usuarios.
+        indice_ticket (int): Parámetro con el índice del dato seleccionado en específico.
+    """
+    st.success("Se ha registrado correctamente la observación.")
+    
+    st.write(f"**:blue[ID del Ticket]:** {var_Identificador_Ticket}")
+    #st.write(f"**:blue[ID del Usuario]:** {id_usuario}")
+    st.write(f"**:blue[Contenido de la Observación]:** {contenido_observacion}")

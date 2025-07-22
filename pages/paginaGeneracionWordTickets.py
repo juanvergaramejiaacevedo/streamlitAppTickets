@@ -4,7 +4,6 @@ import datetime
 import re
 import time
 import io
-import pkg_resources
 from docxtpl import DocxTemplate
 from bd import query_to_df
 

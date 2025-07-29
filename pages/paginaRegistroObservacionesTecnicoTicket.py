@@ -6,7 +6,7 @@ import time
 from streamlit.runtime.fragment import fragment
 from bd import query_to_df, create_observation_ticket, detalle_crear_observacion_ticket
 
-archivo = __file__.split("\\")[-1]
+archivo = __file__.split("/")[-1]
 login.generarLogin(archivo)
 
 if 'correo_electronico' in st.session_state:

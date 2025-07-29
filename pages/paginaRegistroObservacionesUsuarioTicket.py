@@ -6,7 +6,7 @@ import time
 from streamlit.runtime.fragment import fragment
 from bd import query_to_df, create_observation_ticket, detalle_crear_observacion_ticket
 
-archivo = __file__.split("\\")[-1]
+archivo = __file__.split("/")[-1]
 login.generarLogin(archivo)
 
 if 'correo_electronico' in st.session_state:
@@ -52,7 +52,7 @@ if 'correo_electronico' in st.session_state:
         infrol.nombre_rol AS rol_atendido_por
         FROM info_ticket inftic
         JOIN info_usuario infusr ON inftic.id_usuario = infusr.id_usuario
-        LEFT JOIN info_usuario infusr2 ON inftic.id_usuario_soporte = infusr2.id_usuario
+        LEFT JOIN info_usuario infusr2 ON inftic.id_usuario_asignado = infusr2.id_usuario
         LEFT JOIN info_roles infrol ON infusr2.id_rol = infrol.id_rol
         JOIN asunto_ticket asntic ON inftic.id_asunto_ticket = asntic.id_asunto_ticket
         JOIN info_proyecto infpry ON infusr.id_proyecto = infpry.id_proyecto

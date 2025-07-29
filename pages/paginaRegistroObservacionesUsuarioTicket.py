@@ -3,9 +3,10 @@ import login as login
 import datetime
 import re
 import time
+from streamlit.runtime.fragment import fragment
 from bd import query_to_df, create_observation_ticket, detalle_crear_observacion_ticket
 
-archivo = __file__.split("/")[-1]
+archivo = __file__.split("\\")[-1]
 login.generarLogin(archivo)
 
 if 'correo_electronico' in st.session_state:
@@ -104,9 +105,9 @@ if 'correo_electronico' in st.session_state:
             
             for index, row in df_Observaciones.iterrows():
                 st.markdown("---")
-                st.markdown(f"**Observación ID:** {row['id_observacion']}")
+                #st.markdown(f"**Observación ID:** {row['id_observacion']}")
                 st.markdown(f"**Nombre Usuario:** {row['nombre_usuario']}")
-                st.markdown(f"**Rol Usuario:** {row['rol_usuario']}")
+                #st.markdown(f"**Rol Usuario:** {row['rol_usuario']}")
                 st.markdown(f"**Fecha:** {row['fecha_observacion']}")
                 st.markdown(f"**Contenido:** {row['contenido']}")
                 st.markdown("---")

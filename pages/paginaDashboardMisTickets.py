@@ -22,6 +22,7 @@ if 'correo_electronico' in st.session_state:
     vat.numero_documento,
     vat.nombre_proyecto,
     vat.descripcion_asunto,
+    vat.prioridad_ticket,
     vat.descripcion_ticket,
     vat.fecha_creacion,
     vat.fecha_atencion,

@@ -28,7 +28,7 @@ if 'correo_electronico' in st.session_state:
     st.title("📋 Explorador de Tickets")
             
     # Mostrar DataFrame con selección de fila
-    selected = st.dataframe(tickets_df[["identificador", "fecha_creacion", "nombre_asunto", "descripcion_ticket", "nombre_usuario", "correo_usuario", "celular_usuario", "documento_usuario", "proyecto_usuario", "fecha_atencion", "observaciones_ticket", "nombre_tecnico", "correo_tecnico", "celular_tecnico", "documento_tecnico", "rol_atendido_por"]].sort_values(by="identificador", ascending=False), on_select="rerun", selection_mode=["single-row"], use_container_width=True)
+    selected = st.dataframe(tickets_df[["identificador", "prioridad_ticket", "fecha_creacion", "nombre_asunto", "descripcion_ticket", "nombre_usuario", "correo_usuario", "celular_usuario", "documento_usuario", "proyecto_usuario", "fecha_atencion", "observaciones_ticket", "nombre_tecnico", "correo_tecnico", "celular_tecnico", "documento_tecnico", "rol_atendido_por"]].sort_values(by="identificador", ascending=False), on_select="rerun", selection_mode=["single-row"], use_container_width=True)
 
         # Validar si hay selección
     if len(selected.selection.rows) > 0:

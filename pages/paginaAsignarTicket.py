@@ -59,7 +59,7 @@ if 'correo_electronico' in st.session_state:
     st.markdown("""> ## Selecciona un ticket y haz clic en 'Ver Detalle' para ver más información.""")
         
     # Mostrar DataFrame con selección de fila
-    selected = st.dataframe(tickets_df[["identificador", "fecha_creacion", "nombre_completo", "numero_celular", "nombre_proyecto", "descripcion_asunto", "descripcion_ticket"]].sort_values(by="identificador", ascending=False), on_select="rerun", selection_mode=["single-row"], use_container_width=True)
+    selected = st.dataframe(tickets_df[["identificador", "prioridad_ticket", "fecha_creacion", "nombre_completo", "numero_celular", "nombre_proyecto", "descripcion_asunto", "descripcion_ticket"]].sort_values(by="identificador", ascending=False), on_select="rerun", selection_mode=["single-row"], use_container_width=True)
 
     # Validar si hay selección
     if len(selected.selection.rows) > 0:

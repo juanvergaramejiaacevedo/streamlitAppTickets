@@ -35,6 +35,7 @@ if 'correo_electronico' in st.session_state:
 
     query_Tickets = f"""
         SELECT inftic.id_ticket AS identificador,
+        pritk.tipo_prioridad AS prioridad_ticket,
         infusr.nombre_completo AS nombre_usuario,
         infusr.numero_celular AS celular_usuario,
         infusr.correo_electronico AS correo_usuario,
@@ -54,6 +55,7 @@ if 'correo_electronico' in st.session_state:
         JOIN info_usuario infusr ON inftic.id_usuario = infusr.id_usuario
         LEFT JOIN info_usuario infusr2 ON inftic.id_usuario_asignado = infusr2.id_usuario
         LEFT JOIN info_roles infrol ON infusr2.id_rol = infrol.id_rol
+        LEFT JOIN prioridades_ticket pritk ON inftic.prioridad_id = pritk.id_prioridad
         JOIN asunto_ticket asntic ON inftic.id_asunto_ticket = asntic.id_asunto_ticket
         JOIN info_proyecto infpry ON infusr.id_proyecto = infpry.id_proyecto
         WHERE inftic.activo = 'S' AND infusr.correo_electronico = '{usuario_Tickets}'

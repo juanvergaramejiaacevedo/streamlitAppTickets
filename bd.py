@@ -193,7 +193,12 @@ def detalle_cambio_estado_ticket(dataFrame: pd.DataFrame, indice_ticket: int):
         dataFrame (pd.DataFrame): Parámetro con el DataFrame que contiene el listado de Usuarios.
         indice_ticket (int): Parámetro con el índice del dato seleccionado en específico.
     """
-    ticket_detalle = dataFrame.iloc[indice_ticket]
+    #ticket_detalle = dataFrame.iloc[indice_ticket]
+    
+    ticket_detalle_fila = dataFrame[dataFrame['identificador'] == indice_ticket]
+    
+    ticket_detalle = ticket_detalle_fila.iloc[0]
+    
     st.success("Se ha cambiado correctamente el estado.")
     
     st.write(f"**:blue[Fecha de Creación]:** {ticket_detalle['fecha_creacion']}")

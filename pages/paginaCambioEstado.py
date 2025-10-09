@@ -21,6 +21,28 @@ if 'correo_electronico' in st.session_state:
     """
     
     tickets_df = query_to_df(query_Tickets)
+    
+    
+    query_Ticket_Final = """
+        SELECT inftic.id_ticket AS identificador,
+            prtic.tipo_prioridad AS prioridad_ticket,
+            inftic.fecha_creacion,
+            infusr.numero_celular,
+            infusr.nombre_completo,
+            infpry.nombre_proyecto,
+            infusr.correo_electronico,
+            infusr.numero_documento,
+            asntic.descripcion_asunto,
+            inftic.descripcion_ticket,
+            inftic.observaciones_respuesta
+        FROM info_ticket inftic
+        LEFT JOIN info_usuario infusr ON inftic.id_usuario = infusr.id_usuariO
+        LEFT JOIN asunto_ticket asntic ON inftic.id_asunto_ticket = asntic.id_asunto_ticket
+        LEFT JOIN info_proyecto infpry ON infusr.id_proyecto = infpry.id_proyecto
+        LEFT JOIN prioridades_ticket prtic ON inftic.prioridad_id = prtic.id_prioridad;
+    """
+                
+    tickets_df_final = query_to_df(query_Ticket_Final)
 
     #id_usuario = st.session_state.get("id_usuario", None)
     #if id_usuario is not None:
@@ -95,31 +117,9 @@ if 'correo_electronico' in st.session_state:
                     id_usuario_soporte=int(id_usuario_soporte_actual)
                 )
                 
-                query_Ticket_Final = """
-                    SELECT if.id_ticket AS identificador,
-                    pt.tipo_prioridad AS prioridad_ticket,
-                    if.fecha_creacion,
-                    iu.numero_celular,
-                    iu.nombre_completo,
-                    ip.nombre_proyecto,
-                    at.descripcion_asunto,
-                    if.descripcion_ticket,
-                    if.observaciones_respuesta
-                    FROM info_ticket if
-                    INNER JOIN info_usuario iu ON
-                        iu.id_usuario = if.id_usuario
-                    INNER JOIN info_proyecto ip ON
-                        ip.id_proyecto = iu.id_proyecto
-                    INNER JOIN asunto_ticket at ON
-                        at.id_asunto_ticket ON if.id_asunto_ticket
-                    INNER JOIN prioridades_ticket pt ON
-                        pt.id_prioridad = if.prioridad_id
-                    ORDER BY identificador DESC;
-                """
+                identificador_ticket = int(tickets_df.iloc[indice_ticket]["identificador"])
                 
-                tickets_df_final = query_to_df(query_Ticket_Final)
-                
-                detalle_cambio_estado_ticket(dataFrame=tickets_df_final, indice_ticket=indice_ticket)
+                detalle_cambio_estado_ticket(dataFrame=tickets_df_final, indice_ticket=identificador_ticket)
                     
                 #st.switch_page("inicio.py")
                 

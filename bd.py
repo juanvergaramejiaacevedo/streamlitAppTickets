@@ -204,6 +204,18 @@ def detalle_cambio_estado_ticket(dataFrame: pd.DataFrame, indice_ticket: int):
     st.write(f"**:blue[Nombre del Proyecto]:** {ticket_detalle['nombre_proyecto']}")
     st.write(f"**:blue[Asunto del Ticket]:** {ticket_detalle['descripcion_asunto']}")
     st.write(f"**:blue[Observaciones]:** {ticket_detalle['descripcion_ticket']}")
+    st.write(f"**:blue[Observaciones de Respuesta]:** {ticket_detalle['observaciones_respuesta']}")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        numero_Celular_Usuario = ticket_detalle['numero_celular']
+        st.link_button("Enviar WhatsApp", f"https://wa.me/57{numero_Celular_Usuario}")
+        
+    with col2:
+        
+        correo_Electronico_Usuario = ticket_detalle['correo_electronico']
+        st.link_button("Enviar Email", f"mailto:{correo_Electronico_Usuario}")
 
 @st.dialog("Registro de Observación del Ticket", width="large")
 def detalle_crear_observacion_ticket(var_Identificador_Ticket, id_usuario, contenido_observacion):

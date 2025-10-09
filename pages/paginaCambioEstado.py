@@ -95,7 +95,23 @@ if 'correo_electronico' in st.session_state:
                     id_usuario_soporte=int(id_usuario_soporte_actual)
                 )
                 
-                detalle_cambio_estado_ticket(dataFrame=tickets_df, indice_ticket=indice_ticket)
+                query_Ticket_Final = """
+                    SELECT if.id_ticket AS identificador,
+                    if.prioridad_ticket,
+                    if.fecha_creacion,
+                    if.numero_celular,
+                    if.nombre_completo,
+                    if.nombre_proyecto,
+                    if.descripcion_asunto,
+                    if.descripcion_ticket,
+                    if.observaciones_respuesta
+                    FROM info_ticket if
+                    ORDER BY identificador DESC;
+                """
+                
+                tickets_df_final = query_to_df(query_Ticket_Final)
+                
+                detalle_cambio_estado_ticket(dataFrame=tickets_df_final, indice_ticket=indice_ticket)
                     
                 #st.switch_page("inicio.py")
                 

@@ -97,15 +97,23 @@ if 'correo_electronico' in st.session_state:
                 
                 query_Ticket_Final = """
                     SELECT if.id_ticket AS identificador,
-                    if.prioridad_ticket,
+                    pt.tipo_prioridad AS prioridad_ticket,
                     if.fecha_creacion,
-                    if.numero_celular,
-                    if.nombre_completo,
-                    if.nombre_proyecto,
-                    if.descripcion_asunto,
+                    iu.numero_celular,
+                    iu.nombre_completo,
+                    ip.nombre_proyecto,
+                    at.descripcion_asunto,
                     if.descripcion_ticket,
                     if.observaciones_respuesta
                     FROM info_ticket if
+                    INNER JOIN info_usuario iu ON
+                        iu.id_usuario = if.id_usuario
+                    INNER JOIN info_proyecto ip ON
+                        ip.id_proyecto = iu.id_proyecto
+                    INNER JOIN asunto_ticket at ON
+                        at.id_asunto_ticket ON if.id_asunto_ticket
+                    INNER JOIN prioridades_ticket pt ON
+                        pt.id_prioridad = if.prioridad_id
                     ORDER BY identificador DESC;
                 """
                 

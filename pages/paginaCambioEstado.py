@@ -3,6 +3,7 @@ import login as login
 import datetime
 import time
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import re
 from bd import query_to_df, detalle_ticket, update_estado_ticket, detalle_cambio_estado_ticket
 
@@ -91,7 +92,7 @@ if 'correo_electronico' in st.session_state:
                 update_estado_ticket(
                     id_ticket=int(tickets_df.iloc[indice_ticket]["identificador"]),
                     nuevo_estado="Resuelto",
-                    fecha_soporte=datetime.now(),
+                    fecha_soporte=datetime.now(ZoneInfo("America/Bogota")),
                     observaciones_respuesta=observiones_Respuesta_Ticket,
                     id_usuario_soporte=int(id_usuario_soporte_actual)
                 )

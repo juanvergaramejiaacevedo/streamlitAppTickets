@@ -8,7 +8,7 @@ login.generarLogin(archivo)
 
 if 'correo_electronico' in st.session_state:
     
-    st.subheader('Información | :orange[Tablero de Power BI - App Preoperacionales Expansión y Reposición (Bajo Cauca y Nordeste)]')
+    st.subheader('Información | :orange[Tablero de Power BI - Informe AMP 2026]')
     
     components.html("""
         <iframe title="Informe AMP 2026" width="1750" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiMmIwNGNkZTMtYTY5My00MWE1LWJmODYtZThiNjcxNTNhZTFkIiwidCI6ImZhMWU5YjAwLTAwOGEtNDEyZC1iYzcxLWFlNTI4MDg2YTg1MiJ9" frameborder="0" allowFullScreen="true"></iframe>
